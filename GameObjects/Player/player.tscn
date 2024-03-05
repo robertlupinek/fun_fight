@@ -1,0 +1,42 @@
+[gd_scene load_steps=7 format=3 uid="uid://dd64m2gtmdvrw"]
+
+[ext_resource type="SpriteFrames" uid="uid://8hyayw66bd0r" path="res://Images/Sprites/new_sprite_frames.tres" id="1_lm081"]
+[ext_resource type="Script" path="res://Scripts/player_movement.gd" id="1_offy8"]
+[ext_resource type="Script" path="res://Scripts/player_animate.gd" id="3_ijpie"]
+[ext_resource type="Script" path="res://Scripts/camera.gd" id="4_7new0"]
+[ext_resource type="AudioStream" uid="uid://r61e1ydgkbk" path="res://Sounds/SoundFX/jump.wav" id="5_m3kem"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_m6w3u"]
+size = Vector2(6, 15)
+
+[node name="Player" type="CharacterBody2D"]
+floor_stop_on_slope = false
+floor_snap_length = 4.6
+script = ExtResource("1_offy8")
+ground_speed = 2500.0
+air_speed = 1000.0
+gravity = 700.0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+visible = false
+shape = SubResource("RectangleShape2D_m6w3u")
+metadata/_edit_group_ = true
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." node_paths=PackedStringArray("character")]
+position = Vector2(0, -8)
+sprite_frames = ExtResource("1_lm081")
+animation = &"farting"
+script = ExtResource("3_ijpie")
+character = NodePath("..")
+metadata/_edit_group_ = true
+
+[node name="Camera2D" type="Camera2D" parent="." node_paths=PackedStringArray("player")]
+visible = false
+zoom = Vector2(4, 4)
+position_smoothing_enabled = true
+position_smoothing_speed = 30.0
+script = ExtResource("4_7new0")
+player = NodePath("..")
+
+[node name="SoundPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("5_m3kem")

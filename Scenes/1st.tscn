@@ -1,0 +1,93 @@
+[gd_scene load_steps=13 format=3 uid="uid://bkhmv4grtyrlq"]
+
+[ext_resource type="Texture2D" uid="uid://cltldhfqb86e0" path="res://Images/Sprites/Platform.png" id="1_i1wck"]
+[ext_resource type="PackedScene" uid="uid://dbrtvovxgb6e8" path="res://GameObjects/Blocks/jump_through.tscn" id="4_oqi7f"]
+[ext_resource type="PackedScene" uid="uid://dd64m2gtmdvrw" path="res://GameObjects/Player/player.tscn" id="5_qa3s4"]
+[ext_resource type="PackedScene" uid="uid://dlsl6ytpgf531" path="res://GameObjects/Blocks/jump_through_moving_platform.tscn" id="6_bjiv6"]
+[ext_resource type="Script" path="res://Scripts/moving_platform.gd" id="6_g5le2"]
+[ext_resource type="PackedScene" uid="uid://b5pthjkpo0jb4" path="res://GameObjects/Blocks/bouncy_block.tscn" id="6_ox42v"]
+[ext_resource type="PackedScene" uid="uid://d2hk565ysi6jv" path="res://GameObjects/Music/VolcanoSong.tscn" id="7_xukcn"]
+[ext_resource type="PackedScene" uid="uid://c54j17hstl58y" path="res://GameObjects/Blocks/block_test.tscn" id="8_ms4kp"]
+[ext_resource type="Texture2D" uid="uid://coihq5j0wqi54" path="res://Images/Sprites/Sky.png" id="9_76xsd"]
+
+[sub_resource type="Curve2D" id="Curve2D_2x713"]
+resource_local_to_scene = true
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, 768, 0, 0, 0, 0, 0, 768, 0, 0, -5.35143, 0, 5.35143, 1152, 0, 0, 0, 0, 0, 768, 0)
+}
+point_count = 4
+
+[sub_resource type="Curve2D" id="Curve2D_xoo00"]
+resource_local_to_scene = true
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, 384, 0, -11.3137, -21.2132, 11.3137, 21.2132, 384, -240, 0, 0, 0, 0, 384, 0)
+}
+point_count = 3
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_iatqy"]
+size = Vector2(80, 449)
+
+[node name="Node2D" type="Node2D"]
+position = Vector2(-8, 176)
+
+[node name="JumpThroughMovingPlatform" parent="." instance=ExtResource("6_bjiv6")]
+position = Vector2(-696, 24)
+curve = SubResource("Curve2D_2x713")
+
+[node name="JumpThrough" parent="." instance=ExtResource("4_oqi7f")]
+position = Vector2(40, -16)
+
+[node name="JumpThrough2" parent="." instance=ExtResource("4_oqi7f")]
+position = Vector2(80, -164)
+
+[node name="MovingPlatform" type="Path2D" parent="."]
+position = Vector2(152, -88)
+curve = SubResource("Curve2D_xoo00")
+script = ExtResource("6_g5le2")
+speed = 150.0
+
+[node name="PathFollow2D" type="PathFollow2D" parent="MovingPlatform"]
+position = Vector2(384, 0)
+rotates = false
+
+[node name="RemoteTransform2D" type="RemoteTransform2D" parent="MovingPlatform/PathFollow2D"]
+remote_path = NodePath("../../AnimatableBody2D")
+
+[node name="AnimatableBody2D" type="AnimatableBody2D" parent="MovingPlatform"]
+texture_repeat = 2
+position = Vector2(384, 0)
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="MovingPlatform/AnimatableBody2D"]
+position = Vector2(0, 215.5)
+shape = SubResource("RectangleShape2D_iatqy")
+
+[node name="Sprite2D" type="Sprite2D" parent="MovingPlatform/AnimatableBody2D"]
+texture_repeat = 2
+position = Vector2(0, 216)
+texture = ExtResource("1_i1wck")
+region_enabled = true
+region_rect = Rect2(20, 1, 81, 450)
+
+[node name="Player" parent="." instance=ExtResource("5_qa3s4")]
+position = Vector2(-120, -32)
+extra_jumps = 10000
+
+[node name="VolcanoSong" parent="." instance=ExtResource("7_xukcn")]
+
+[node name="Block" parent="." instance=ExtResource("8_ms4kp")]
+position = Vector2(248, 104)
+rotation = -0.295929
+scale = Vector2(-17.506, -0.560302)
+
+[node name="BouncyBlock" parent="." instance=ExtResource("6_ox42v")]
+position = Vector2(40, -80)
+rotation = 0.856328
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+z_index = -2
+texture_repeat = 2
+position = Vector2(200, 0)
+texture = ExtResource("9_76xsd")
+region_enabled = true
+region_rect = Rect2(2, 0, 1636, 500)
